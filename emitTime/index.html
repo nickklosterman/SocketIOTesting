@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+    <head>
+        <!-- <script src='//code.jquery.com/jquery-1.7.2.min.js'></script> -->
+        <!-- <script src='//localhost:3000/socket.io/socket.io.js'></script> -->
+
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+        <script src='http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js'></script>
+        <script>
+            var socket = io.connect('http://10.20.99.169:8090');
+
+            socket.on('welcome', function(data) {
+                $('#messages').append('<li>' + data.message + '</li>');
+
+                socket.emit('i am client', {data: 'foo!'});
+            });
+            socket.on('time', function(data) {
+                console.log(data);
+                $('#messages').append('<li>' + data.time + '</li>');
+            });
+            socket.on('error', function() { console.error(arguments) });
+            socket.on('message', function() { console.log(arguments) });
+        </script>
+    </head>
+    <body>
+        <ul id='messages'></ul>
+        <ul id='counter'></u>
+    </body>
+</html>

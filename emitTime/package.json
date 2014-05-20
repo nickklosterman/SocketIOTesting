@@ -1,0 +1,23 @@
+{
+  "name": "emitTime",
+  "version": "0.0.0",
+  "description": "simple socket.io example that emits the time",
+  "main": "app.js",
+  "dependencies": {
+    "socket.io": "^0.9.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nickklosterman/SocketIOTesting/emitTime"
+  },
+  "keywords": [
+    "socket.io",
+    "node.js"
+  ],
+  "author": "Nick Klosterman",
+  "license": "ISC"
+}
