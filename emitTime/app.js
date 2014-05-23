@@ -27,12 +27,12 @@ io.sockets.on('connection', function(socket) {
     console.log('connect, num users:'+counter);
     
     socket.on('i am client', console.log);
-socket.on('disconnect',function() {
-    if (counter)  { 
-	--counter;
-	console.log('disconnect, num users:'+counter);
-    }
-});
+    socket.on('disconnect',function() {
+	if (counter)  { 
+	    --counter;
+	    console.log('disconnect, num users:'+counter);
+	}
+    });
 });
 
 app.listen(8090);
