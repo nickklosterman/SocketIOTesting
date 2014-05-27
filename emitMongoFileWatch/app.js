@@ -47,6 +47,7 @@ function getLastRecord() {
 	    if (err) { console.log(err); }
 	    console.log('getLastRecord');
 	    if (typeof data !== 'undefined' && data !== null && data.length > 0) {
+		var siteTimer = data[0].site+'timer';
                 switch(data[0].site){
                 case "WM":
                 case "CL":
@@ -61,6 +62,7 @@ function getLastRecord() {
 		    console.log('getLastRecord----:'+JSON.stringify(data));
 		    break;
 		}
+		io.sockets.emit(siteTimer,data[0].duration);
 	    } else {
 		console.log('fuck');
 	    }
@@ -173,14 +175,16 @@ function getRecordsFromDB(site,callback) {
         });
     });
 };
-var increment=0;
+
+// function emitData(site,data) {
+// io.sockets.emit(site,{
+// };
+
 function emitData(site,data) {
     console.log('emitData called for '+site);
 //    console.log('data:' + data);
     io.sockets.emit(site ,{data:data});
     var time = new Date().getTime();
-//    io.sockets.emit(site,{data:time});
-    io.sockets.emit('counter', {counter:increment});
 };
 
 var counter=0; 
