@@ -49,13 +49,17 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       $('#SACtimer').attr('max',data);
 //      $('#SACduration').html(data);
       $('#SACduration').text(data);
-      SACtimer = data;
+  //    SACtimer = data;
       });
       socket.on('SAC', function(data) {
       console.log(data.data);
       $('#SAC').html(data.data);
       });
 
+//set time on initial load
+      socket.on('SACremainingtime', function(data) {$('#SACtimer').attr('value',data); SACtimer = data; console.log('SACtime:'+data); });
+      socket.on('WMremainingtime', function(data) {$('#WMtimer').attr('value',data); WMtimer = data; console.log('WMtime:'+data); });
+      socket.on('CLremainingtime', function(data) {$('#CLtimer').attr('value',data); CLtimer = data; console.log('CLtime:'+data); });
 
       socket.on('CLtimer', function(data) {
       console.log('CLtimer called');
@@ -64,7 +68,7 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       $('#CLtimer').attr('max',data);
       $('#CLduration').text(data);
       }
-      CLtimer = data;
+//      CLtimer = data;
       });
 
       socket.on('CL', function(data) {
@@ -80,7 +84,7 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       $('#WMduration').text(data);
       }
 
-      WMtimer = data;
+//      WMtimer = data; //this will overwrite what was sent in the emit('WMtime', call!
       });
 
       socket.on('WM', function(data) {
@@ -116,7 +120,7 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
 li>img { display: none; }
 li:hover>img {display: inline; }
 
-div {display: inline; }
+div>div {display: inline; }
 
 </style>
 
@@ -127,6 +131,7 @@ div {display: inline; }
     <div id='welcome'></div>
     <!-- <input id='query' type='text' placeholder='Enter your search term here!'> -->
     <!-- <input id='send' type='button' value='Query'> -->
+<div>
     <progress id='SACtimer' max='100' value='100'></progress>
     <div id='SACtimeleft'></div> / <div id='SACduration'></div>
     <div id='SAC'></div>
@@ -138,8 +143,8 @@ div {display: inline; }
     <progress id='WMtimer' max='100' value='100'></progress>
     <div id='WMtimeleft'></div> / <div id='WMduration'></div>
     <div id='WM'></div>
+</div>
 
-
-    <ul id='counter'></ul>
+    <!-- <ul id='counter'></ul> -->
 </body>
 </html>

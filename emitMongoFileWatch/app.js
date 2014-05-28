@@ -19,19 +19,35 @@ function getLastRecordForSite(site) {
         if (err) {throw err;}
         var collection  = db.collection('deal');
 //        collection.find({site:site}).sort({_id:-1}).limit(1).toArray(function(err,data) {
-        collection.find({site:site}).limit(1).toArray(function(err,data) {
+//        collection.find({site:site}).limit(1).toArray(function(err,data) {
+        collection.find({site:site}).sort({_id:-1}).limit(1).toArray(function(err,data) {
+	    if (err) {throw err;}
+	    var timeLeft = 0;
 	    console.log('getLastRecordForSite '+site);
                 switch(site){
                 case "WM":
                 case "CL":
 //		    console.log(data.productTitle);
-		    console.log(data);
+//		    console.log(data[0]);
+		 //   console.log(data[0]);
+//I'm having a problem where the computed timeLeft ends up > than the duration, some i'm using the min as a workaround
+//		    timeLeft = data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time )
+		    timeLeft =Math.min( data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ),data[0].duration)
+//		    console.log(data[0].duration+' '+parseInt((new Date()).getTime()/1000,10)+' '+ data[0].utc_load_time +' diff:'+(parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ));
+//		    console.log('timeLeft:'+timeLeft);
+		    io.sockets.emit(data[0].site+'remainingtime',timeLeft); //the {WM,SAC,CL}timer value is overwritten by the io.sockets.emit call just outside of this switch statement :(
 		    break;
 		case "SAC":
 //		    console.log(data.name);
-		    console.log(data);
+//		    console.log(data[0]);
+		    timeLeft = data[0].timeRemaining;
+//		    console.log('timeRemaining:'+data[0].timeRemaining);
+		    io.sockets.emit(data[0].site+'remainingtime',timeLeft); //the {WM,SAC,CL}timer value is overwritten by the io.sockets.emit call just outside of this switch statement :(
+
 		    break;
 		}
+		var siteTimer = data[0].site+'timer';
+		io.sockets.emit(siteTimer,data[0].duration);
 	});//end collection.find
 //	db.close();
     });//end mongoClient.connect
@@ -48,22 +64,37 @@ function getLastRecord() {
 	    console.log('getLastRecord');
 	    if (typeof data !== 'undefined' && data !== null && data.length > 0) {
 		var siteTimer = data[0].site+'timer';
-                switch(data[0].site){
+       		var timeLeft = 0;
+         switch(data[0].site){
                 case "WM":
                 case "CL":
 		    console.log('getlastRecord====:'+data[0].productTitle);
 		    getRecordListForProduct(data[0].productTitle);
+		    //console.log('utc_time_offset:'+data[0].utc_load_time);
+//emit the correct remaining time
+//I'm having a problem where the computed timeLeft ends up > than the duration, some i'm using the min as a workaround
+//		    timeLeft = data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time )
+		    timeLeft =Math.min( data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ),data[0].duration)
+//you can also look at the 'emitted' data that is output to the consoel as well. 
+//		    console.log(data[0].duration+' '+parseInt((new Date()).getTime()/1000,10)+' '+ data[0].utc_load_time +' diff:'+(parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ));
+//		    console.log('timeLeft:'+timeLeft);
+		    io.sockets.emit(data[0].site+'remainingtime',timeLeft); //the {WM,SAC,CL}timer value is overwritten by the io.sockets.emit call just outside of this switch statement :(
 		    break;
 		case "SAC":
 		    console.log('getLastRecord----:'+data[0].name);
 		    getRecordListForProduct(data[0].name);
+		    timeLeft = data[0].timeRemaining;
+		    //console.log('timeRemaining:'+data[0].timeRemaining);
+		    io.sockets.emit(data[0].site+'remainingtime',timeLeft); //the {WM,SAC,CL}timer value is overwritten by the io.sockets.emit call just outside of this switch statement :(
 		    break; 
 		default:
 		    console.log('getLastRecord----:'+JSON.stringify(data));
 		    break;
 		}
 		console.log(siteTimer+' '+data[0].duration);
+		//TODO: this needs to be fixed such that a new connection (which proly won't start right when a product is update) gets an accurate timer duration.
 		io.sockets.emit(siteTimer,data[0].duration);
+//		io.sockets.emit(data[0].site+'remainingtime',timeLeft); 
 	    } else {
 		console.log('fuck');
 	    }
@@ -81,17 +112,19 @@ function getRecordListForProduct(product) {
         var collection  = db.collection('deal');
 	collection.find({ $or: [ {name: searchProduct },{productTitle: searchProduct }]}).toArray(function(err,data) {
 	    console.log('getRecordListForProduct:');
-            for (var counter = 0, size=data.length; counter<size;counter++){
-                switch(data[counter].site){
-                case "WM":
-                case "CL":
-		    console.log(data[counter].productTitle+' '+data[counter].price);
-		    break;
-		case "SAC":
-		    console.log(data[counter].name+' '+data[counter].price);
-		    break;
-		default:
-		    console.log('site not found');
+	    if (typeof data !== 'undefined' && data.length>0){
+		for (var counter = 0, size=data.length; counter<size;counter++){
+                    switch(data[counter].site){
+                    case "WM":
+                    case "CL":
+			console.log(data[counter].productTitle+' '+data[counter].price);
+			break;
+		    case "SAC":
+			console.log(data[counter].name+' '+data[counter].price);
+			break;
+		    default:
+			console.log('site not found');
+		    }
 		}
 	    }
 
@@ -142,7 +175,7 @@ function getRecordsFromDB(site,callback) {
                                 link="http://www.chainlove.com";
                                 break;
                             }
-                            output+='<li> <a href="'+link+'"><img  src="'+image+'"> </a>'+data[counter].productTitle+' $'+data[counter].price+'</li>';
+                            output+='<li> <a href="'+link+'"><img  src="'+image+'"></a>'+data[counter].productTitle+' $'+data[counter].price+'</li>';
                         } else {
                             output+='<li> <img src="'+image+'">'+data[counter].productTitle+' $'+data[counter].price+'</li>';
                         }
@@ -158,7 +191,7 @@ function getRecordsFromDB(site,callback) {
                         }
                         //If it is the first element (i.e. the current deal) make the image a link to the site
                         if (counter===0) {
-                            output+='<li> <a href="http://www.steepandcheap.com/current-steal"> <img height="100" width="100" src="'+image+'"> </a>'+data[counter].brand.name+' '+data[counter].name+' $'+data[counter].price+' duration:'+data[counter].duration+' quantity:'+data[counter].qtyInitial+'</li>';
+                            output+='<li> <a href="http://www.steepandcheap.com/current-steal"> <img height="100" width="100" src="'+image+'"></a>'+data[counter].brand.name+' '+data[counter].name+' $'+data[counter].price+' duration:'+data[counter].duration+' quantity:'+data[counter].qtyInitial+'</li>';
                         } else {
                             output+='<li> <img height="100" width="100" src="'+image+'">'+data[counter].brand.name+' '+data[counter].name+' $'+data[counter].price+' duration:'+data[counter].duration+' quantity:'+data[counter].qtyInitial+'</li>';
                         }
@@ -195,14 +228,14 @@ io.sockets.on('connection', function(socket) {
 
 //get initial data set so they aren't staring at an empty screen.
     getRecordsFromDB('SAC',emitData);
-//    getLastRecordForSite('SAC');
+    getLastRecordForSite('SAC');
 
     getRecordsFromDB('CL',emitData);
-  //  getLastRecordForSite('CL');
-
+    getLastRecordForSite('CL');
+    
     getRecordsFromDB('WM',emitData);
-//   getLastRecordForSite('WM');
-   getLastRecord();
+    getLastRecordForSite('WM');
+    //   getLastRecord();
 
     //watch out 'heartbeat' file for notifications of any changes
     fs.watch('/tmp/BackCountryHeartbeat.txt',function(curr,prev) { 
