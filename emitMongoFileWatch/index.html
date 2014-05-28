@@ -16,16 +16,23 @@
       function countdown() {
 //      var newValue=parseInt(element.attr('value'))-1;
  //     element.attr('value',newValue)
+
+//The date object returns milliseconds since 1970; so this is chopping off the milliseconds and basing the date off the seconds only https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 var offset_seconds = parseInt((new Date()).getTime()/1000,10)
       console.log('offset_seconds:'+offset_seconds);
 
 
       WMtimer -= 1;
+      $('#WMtimeleft').text(WMtimer);
       $('#WMtimer').attr('value',WMtimer);
       CLtimer -=1;
+      $('#CLtimeleft').text(CLtimer);
       $('#CLtimer').attr('value',CLtimer);
       SACtimer -=1;
       $('#SACtimer').attr('value',SACtimer);
+//      $('#SACtimeleft').html(SACtimer);
+      $('#SACtimeleft').text(SACtimer);
+      
 console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       };
 //      var socket = io.connect('http://localhost:8090');
@@ -40,7 +47,8 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       }
 
       $('#SACtimer').attr('max',data);
-
+//      $('#SACduration').html(data);
+      $('#SACduration').text(data);
       SACtimer = data;
       });
       socket.on('SAC', function(data) {
@@ -54,6 +62,7 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       var elem =  $('#CLtimer')
       if (typeof elem !== 'undefined') {
       $('#CLtimer').attr('max',data);
+      $('#CLduration').text(data);
       }
       CLtimer = data;
       });
@@ -68,6 +77,7 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       var elem =  $('#WMtimer')
       if (typeof elem !== 'undefined') {
       $('#WMtimer').attr('max',data);
+      $('#WMduration').text(data);
       }
 
       WMtimer = data;
@@ -102,9 +112,12 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       });
     </script>
 <style>
-/*this styling hides the images in the past deals unless hovered over */
+/*this styling hides the images of the past deals unless hovered over */
 li>img { display: none; }
 li:hover>img {display: inline; }
+
+div {display: inline; }
+
 </style>
 
   </head>
@@ -112,15 +125,18 @@ li:hover>img {display: inline; }
     <p>Be sure to change the socket variable in the html to match the ip of the server. </p>
 
     <div id='welcome'></div>
-    <input id='query' type='text' placeholder='Enter your search term here!'>
-    <input id='send' type='button' value='Query'>
+    <!-- <input id='query' type='text' placeholder='Enter your search term here!'> -->
+    <!-- <input id='send' type='button' value='Query'> -->
     <progress id='SACtimer' max='100' value='100'></progress>
+    <div id='SACtimeleft'></div> / <div id='SACduration'></div>
     <div id='SAC'></div>
     <hr>
     <progress id='CLtimer' max='100' value='100'></progress>
+    <div id='CLtimeleft'></div> / <div id='CLduration'></div>
     <div id='CL'></div>
     <hr>
     <progress id='WMtimer' max='100' value='100'></progress>
+    <div id='WMtimeleft'></div> / <div id='WMduration'></div>
     <div id='WM'></div>
 
 
