@@ -33,7 +33,7 @@ function getLastRecordForSite(site) {
 //I'm having a problem where the computed timeLeft ends up > than the duration, some i'm using the min as a workaround
 //		    timeLeft = data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time )
 		    timeLeft =Math.min( data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ),data[0].duration)
-//		    console.log(data[0].duration+' '+parseInt((new Date()).getTime()/1000,10)+' '+ data[0].utc_load_time +' diff:'+(parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ));
+		    console.log(data[0].duration+' '+parseInt((new Date()).getTime()/1000,10)+' '+ data[0].utc_load_time +' diff:'+(parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ));
 //		    console.log('timeLeft:'+timeLeft);
 		    io.sockets.emit(data[0].site+'remainingtime',timeLeft); //the {WM,SAC,CL}timer value is overwritten by the io.sockets.emit call just outside of this switch statement :(
 		    break;
@@ -76,7 +76,7 @@ function getLastRecord() {
 //		    timeLeft = data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time )
 		    timeLeft =Math.min( data[0].duration - (parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ),data[0].duration)
 //you can also look at the 'emitted' data that is output to the consoel as well. 
-//		    console.log(data[0].duration+' '+parseInt((new Date()).getTime()/1000,10)+' '+ data[0].utc_load_time +' diff:'+(parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ));
+		    console.log(data[0].duration+' '+parseInt((new Date()).getTime()/1000,10)+' '+ data[0].utc_load_time +' diff:'+(parseInt((new Date()).getTime()/1000,10) - data[0].utc_load_time ));
 //		    console.log('timeLeft:'+timeLeft);
 		    io.sockets.emit(data[0].site+'remainingtime',timeLeft); //the {WM,SAC,CL}timer value is overwritten by the io.sockets.emit call just outside of this switch statement :(
 		    break;

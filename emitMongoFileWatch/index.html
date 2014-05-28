@@ -12,13 +12,19 @@
           CLtimer = 0,
           SACtimer = 0;
 //      function createInterval(f,dynamicParameter,interval) {       setInterval(function() { f(dynamicParameter); }, interval);       }
+ function formatTime(totalSec) {
+var minutes = parseInt( totalSec / 60 ) % 60;
+var seconds = totalSec % 60;
 
+var result =  (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds  < 10 ? "0" + seconds : seconds);
+return result;
+};
       function countdown() {
 //      var newValue=parseInt(element.attr('value'))-1;
  //     element.attr('value',newValue)
 
 //The date object returns milliseconds since 1970; so this is chopping off the milliseconds and basing the date off the seconds only https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
-var offset_seconds = parseInt((new Date()).getTime()/1000,10)
+														     var offset_seconds = parseInt((new Date()).getTime()/1000,10);
       console.log('offset_seconds:'+offset_seconds);
 
 
@@ -32,7 +38,11 @@ var offset_seconds = parseInt((new Date()).getTime()/1000,10)
       $('#SACtimer').attr('value',SACtimer);
 //      $('#SACtimeleft').html(SACtimer);
       $('#SACtimeleft').text(SACtimer);
+$('#SACtimeMinSec').text(formatTime(SACtimer));
+$('#WMtimeMinSec').text(formatTime(WMtimer));
+$('#CLtimeMinSec').text(formatTime(CLtimer));
       
+
 console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       };
 //      var socket = io.connect('http://localhost:8090');
@@ -133,15 +143,15 @@ div>div {display: inline; }
     <!-- <input id='send' type='button' value='Query'> -->
 <div>
     <progress id='SACtimer' max='100' value='100'></progress>
-    <div id='SACtimeleft'></div> / <div id='SACduration'></div>
+    <div id='SACtimeleft'></div> / <div id='SACduration'></div> <div id='SACtimeMinSec'></div>
     <div id='SAC'></div>
     <hr>
     <progress id='CLtimer' max='100' value='100'></progress>
-    <div id='CLtimeleft'></div> / <div id='CLduration'></div>
+    <div id='CLtimeleft'></div> / <div id='CLduration'></div> <div id='CLtimeMinSec'></div>
     <div id='CL'></div>
     <hr>
     <progress id='WMtimer' max='100' value='100'></progress>
-    <div id='WMtimeleft'></div> / <div id='WMduration'></div>
+    <div id='WMtimeleft'></div> / <div id='WMduration'></div> <div id='WMtimeMinSec'></div>
     <div id='WM'></div>
 </div>
 
