@@ -1,0 +1,11 @@
+--2014-05-28 17:56:03--  http://images.chainlove.com/images/chainlove/logo.png
+Resolving images.chainlove.com (images.chainlove.com)... 50.58.243.162, 50.58.243.139
+Connecting to images.chainlove.com (images.chainlove.com)|50.58.243.162|:80... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 4279 (4.2K) [image/png]
+Saving to: ‘logo.png’
+
+     0K ....                                                  100%  186M=0s
+
+2014-05-28 17:56:03 (186 MB/s) - ‘logo.png’ saved [4279/4279]
+

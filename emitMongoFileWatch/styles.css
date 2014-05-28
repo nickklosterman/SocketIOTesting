@@ -1,0 +1,5 @@
+/*this styling hides the images of the past deals unless hovered over */
+li>img { display: none; }
+li:hover>img {display: inline; }
+
+div>div {display: inline; }
