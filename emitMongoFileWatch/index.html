@@ -8,30 +8,74 @@
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js'></script>
     <script>
-      var countdown = function(element) {
-      var newValue=parseInt(element.attr('value'))-1;
-      element.setAttribute('value',newValue)
+      var WMtimer = 0,
+          CLtimer = 0,
+          SACtimer = 0;
+//      function createInterval(f,dynamicParameter,interval) {       setInterval(function() { f(dynamicParameter); }, interval);       }
+
+      function countdown() {
+//      var newValue=parseInt(element.attr('value'))-1;
+ //     element.attr('value',newValue)
+var offset_seconds = parseInt((new Date()).getTime()/1000,10)
+      console.log('offset_seconds:'+offset_seconds);
+
+
+      WMtimer -= 1;
+      $('#WMtimer').attr('value',WMtimer);
+      CLtimer -=1;
+      $('#CLtimer').attr('value',CLtimer);
+      SACtimer -=1;
+      $('#SACtimer').attr('value',SACtimer);
+console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       };
 //      var socket = io.connect('http://localhost:8090');
       var socket = io.connect('http://10.20.99.169:8090');
+
+      socket.on('SACtimer', function(data) {
+      console.log('SACtimer called');      console.log(data);
+ 
+      var elem =  $('#SACtimer')
+      if (typeof elem !== 'undefined') {
+      $('#SACtimer').attr('max',data);
+      }
+
+      $('#SACtimer').attr('max',data);
+
+      SACtimer = data;
+      });
       socket.on('SAC', function(data) {
       console.log(data.data);
       $('#SAC').html(data.data);
-      $('#SACtimer').setAttribute('max',data.data.duration);
-
-setInterval(countdown,1000);
-
       });
+
+
+      socket.on('CLtimer', function(data) {
+      console.log('CLtimer called');
+      var elem =  $('#CLtimer')
+      if (typeof elem !== 'undefined') {
+      $('#CLtimer').attr('max',data);
+      }
+      CLtimer = data;
+      });
+
       socket.on('CL', function(data) {
       console.log(data.data);
       $('#CL').html(data.data);
-      $('#CLtimer').setAttribute('max',data.data.duration);
       });
+
+      socket.on('WMtimer', function(data) {
+      console.log('WMtimer called');
+      var elem =  $('#WMtimer')
+      if (typeof elem !== 'undefined') {
+      $('#WMtimer').attr('max',data);
+      }
+
+      WMtimer = data;
+      });
+
       socket.on('WM', function(data) {
       console.log(data.data);
       $('#WM').html(data.data);
-      $('#WMtimer').setAttribute('max',data.data.duration);
-
       });
       socket.on('counter', function(data) {
       $('#counter').html(data);
@@ -39,6 +83,10 @@ setInterval(countdown,1000);
       socket.on('welcome', function(data) {
       $('#welcome').html(data.message);
       console.log(data.message);
+
+//using setInterval seems a bit expensive. Is there another way to do this? simply post the ending time based on the time the deal was inited and its duration?
+      //start this when we receive the welcome message
+      setInterval(countdown,1000); //http://stackoverflow.com/questions/457826/pass-parameters-in-setinterval-function
       });
       socket.on('error', function() { console.error(arguments) });
       socket.on('message', function() { console.log(arguments) });

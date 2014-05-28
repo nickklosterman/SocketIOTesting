@@ -62,6 +62,7 @@ function getLastRecord() {
 		    console.log('getLastRecord----:'+JSON.stringify(data));
 		    break;
 		}
+		console.log(siteTimer+' '+data[0].duration);
 		io.sockets.emit(siteTimer,data[0].duration);
 	    } else {
 		console.log('fuck');
