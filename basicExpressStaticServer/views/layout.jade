@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    // script(src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js') 
+    // script(src='http://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js') 
+
+    script(src='/libs/jquery/2.1.1/jquery.min.js')
+    script(src='/libs/socket.io/0.9.16/socket.io.min.js')
+    script(src='/javascripts/client.js') 
+    // client.js must be after socket.io.min.js otherwise io won't be defined.
+
+  body
+    block content

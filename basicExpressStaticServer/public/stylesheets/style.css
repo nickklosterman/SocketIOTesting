@@ -1,0 +1,20 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+/* stolen right from the WM page*/
+#WM {
+   
+/*    background: url('/images/wm-sprite.png') no-repeat scroll -15px -1470px transparent;*/
+    height:90px;
+    background: url('/images/wm-sprite.png')  scroll -15px -1470px transparent;
+}
+#CL {
+    height:90px;
+    background: url('/images/CLlogo.png'); /* */
+}

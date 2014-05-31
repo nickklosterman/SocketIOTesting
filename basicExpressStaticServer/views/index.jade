@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  p Jade is #{myJadeString}
+  #welcome
+
+  progress(id='SACtimer' max='100' value='100')
+  #SACtimeleft /
+  #SACduration
+  #SACtimeMinSec
+  #SAC
+
+  progress(id='CLtimer' max='100' value='100')
+  #CLtimeleft /
+  #CLduration
+  #CLtimeMinSec
+  #CL
+
+  progress(id='WMtimer' max='100' value='100')
+  #WMtimeleft /
+  #WMduration
+  #WMtimeMinSec
+  #WM
