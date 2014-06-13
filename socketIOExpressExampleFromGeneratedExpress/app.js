@@ -63,6 +63,6 @@ io.on('connection', function (socket) {
     socket.on('my other event', function (data) { console.log(data);});
 });
 
-server.listen();
+server.listen(3000);
 
 module.exports = app;
