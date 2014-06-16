@@ -1,0 +1,40 @@
+http://stackoverflow.com/questions/23468150/express-js-4-0-command-line-tool-not-working
+Express 4 seperates the generator from express.
+
+What you need to do is to run:
+
+$ npm install -g express-generator
+
+
+http://stackoverflow.com/questions/12764346/socket-io-error-listen-method-expects-an-http-server-instance-after-moving
+There was a change to how you initialize express apps between versions 2 and 3. This example is based on version 2 but it looks like you've installed version 3. You just need to change a couple of lines to set up socket.io correctly. Change these lines:
+
+var app = require('express').createServer(),
+    io = require('socket.io').listen(app),
+    scores = {};                                
+
+// listen for new web clients:
+app.listen(8080);
+
+to this:
+
+var express = require('express'),
+    app = express()
+  , http = require('http')
+  , server = http.createServer(app)
+  , io = require('socket.io').listen(server);
+
+// listen for new web clients:
+server.listen(8080);
+
+In jade to include files etc put those in the layout.jade file. Or at least be aware that the index.jade is extended from layout.jade and that is where all the headers are put in. 
+
+Jade is a picky bitch about spacing (like Python) and this can bring about unwanted behavior. Ie. line comments being interpreted as block comments due to too much white space following //.
+
+http://stackoverflow.com/questions/7603224/node-server-socket-io-io-is-not-defined
+Define your variables before you use them. I.e. include socket.io before trying to use it by the client.
+
+The fluid development of node means tyring to figure out what advice is still relevant....shifting sands and all....
+https://github.com/visionmedia/express/wiki/Migrating-from-2.x-to-3.x#socketio-compatibility
+
+Make sure versions match. I was trying to use socket io version X on the client and version Y on the server. That won't work. 

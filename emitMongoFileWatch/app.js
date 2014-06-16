@@ -135,7 +135,6 @@ function getRecordsFromDB(site,callback) {
     var image;
     //console.log(site);
     collection.find({site:site}).sort({_id:-1}).limit(5).toArray(function(err,data) {
-	
 	//        collection.find({}).sort({_id:-1}).limit(5).toArray(function(err,data) {
 	//console.log(data);
         if (err) { throw err;}
