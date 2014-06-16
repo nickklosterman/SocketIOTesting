@@ -104,6 +104,11 @@ console.log('WM:'+WMtimer+' CL:'+CLtimer+' SAC:'+SACtimer);
       console.log(data.data);
       $('#WM').html(data.data);
       });
+
+      socket.on('undefinedtimer', function(data) {
+      console.log("undefined timer was emitted.");
+      });
+									   
       socket.on('counter', function(data) {
       $('#counter').html(data);
       });
