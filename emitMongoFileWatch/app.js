@@ -59,7 +59,8 @@ function getLastRecord() {
     mongoClient.connect('mongodb://127.0.0.1:27017/bc',function(err,db){
         if (err) {throw err;}
         var collection = db.collection('deal');
-        collection.find({}).sort({_id:-1}).limit(1).toArray(function(err,data) {
+//        collection.find({}).sort({_id:-1}).limit(1).toArray(function(err,data) { //for arch linux
+        collection.find({}).sort({_id:1}).limit(1).toArray(function(err,data) { //for linux mint
 	    if (err) { console.log(err); }
 	    console.log('getLastRecord');
 	    if (typeof data !== 'undefined' && data !== null && data.length > 0) {
@@ -143,7 +144,9 @@ function getRecordsFromDB(site,callback) {
         output="<ul>";
         var image;
 	//console.log(site);
-        collection.find({site:site}).sort({_id:-1}).limit(5).toArray(function(err,data) {
+//        collection.find({site:site}).sort({_id:-1}).limit(5).toArray(function(err,data) { //arch
+        collection.find({site:site}).sort({_id:1}).limit(5).toArray(function(err,data) { // mint
+
 	
 //        collection.find({}).sort({_id:-1}).limit(5).toArray(function(err,data) {
 //console.log(data);

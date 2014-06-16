@@ -8,9 +8,9 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var app = express()
+var app = new express()
 , server = require('http').createServer(app)//.listen(3000)
-, io = require('socket.io')(server);//.listen(server);
+, io = require('socket.io').listen(server);//(server);//.listen(server);
 
 
 // view engine setup
@@ -63,6 +63,9 @@ io.on('connection', function (socket) {
     socket.on('my other event', function (data) { console.log(data);});
 });
 
-server.listen(3000);
+server.listen(3000); //gives error bc address already in use.
+//server.listen();
+//app.listen(); //this would then listen on the express app and not the http server. we need to listen on the http server so we can serve the socket data.
+
 
 module.exports = app;
