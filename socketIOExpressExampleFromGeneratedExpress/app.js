@@ -8,9 +8,16 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-var app = new express()
-, server = require('http').createServer(app)//.listen(3000)
-, io = require('socket.io').listen(server);//(server);//.listen(server);
+//var app = new express()
+//, server = require('http').createServer(app)//.listen(3000)
+//, io = require('socket.io').listen(server);//(server);//.listen(server);
+
+//http://socket.io/docs/#using-with-express-3/4
+//var app = require('express')();
+var app = new express();
+var server = require('http').createServer(app);
+var io = require('socket.io').listen(server);
+
 
 
 // view engine setup
@@ -63,9 +70,8 @@ io.on('connection', function (socket) {
     socket.on('my other event', function (data) { console.log(data);});
 });
 
-server.listen(3000); //gives error bc address already in use.
-//server.listen();
+//server.listen(3000); //gives error bc address already in use.
+server.listen();
 //app.listen(); //this would then listen on the express app and not the http server. we need to listen on the http server so we can serve the socket data.
-
 
 module.exports = app;
